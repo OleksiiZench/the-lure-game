@@ -1,7 +1,7 @@
 // Copyright 2026 Oleksii Zenchenko & Denys Honcherenko. All Rights Reserved.
 
 
-#include "Core/LureGameMode.h"
+#include "Core/GameModes/LureGameMode.h"
 
 #include "Player/LurePlayerCharacter.h"
 #include "Player/LurePlayerController.h"
