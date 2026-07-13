@@ -3,3 +3,61 @@
 
 #include "Player/LurePlayerCharacter.h"
 
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "EnhancedInputComponent.h"
+
+#include "DataAssets/LureInputConfig.h"
+#include "LureGameplayTags.h"
+
+ALurePlayerCharacter::ALurePlayerCharacter()
+{
+	SetupCamera();
+}
+
+void ALurePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	if (UEnhancedInputComponent *EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		if (!InputConfig)
+			return;
+		
+		const UInputAction *MoveAction = InputConfig->FindNativeInputActionForTag(LureGameplayTags::InputTag_Move, true);
+		if (MoveAction)
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALurePlayerCharacter::Input_Move);
+		
+		const UInputAction *LookAction = InputConfig->FindNativeInputActionForTag(LureGameplayTags::InputTag_Look, true);
+		if (LookAction)
+			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALurePlayerCharacter::Input_Look);
+	}
+}
+
+void ALurePlayerCharacter::Input_Move(const FInputActionValue& InputActionValue)
+{
+	FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+	if (Controller)
+	{
+		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
+		AddMovementInput(GetActorRightVector(), MovementVector.X);
+	}
+}
+
+void ALurePlayerCharacter::Input_Look(const FInputActionValue& InputActionValue)
+{
+	FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();
+	if (Controller)
+	{
+		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void ALurePlayerCharacter::SetupCamera()
+{
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+	CameraComponent->SetupAttachment(GetCapsuleComponent());
+	CameraComponent->SetRelativeLocation(FVector(-10.0f, 0.0f, 60.0f));
+	CameraComponent->bUsePawnControlRotation = true;
+}

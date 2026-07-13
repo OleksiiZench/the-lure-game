@@ -7,6 +7,9 @@
 
 #include "LurePlayerController.generated.h"
 
+class UCameraComponent;
+class UInputMappingContext;
+
 /**
  * 
  */
@@ -15,4 +18,12 @@ class THELURE_API ALurePlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void SetupInputComponent() override;
+	
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lure|Input", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext *DefaultMappingContext;
+	
+	void AddDefaultMappingContext();
 };
