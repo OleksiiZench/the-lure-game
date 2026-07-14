@@ -28,6 +28,10 @@
 		{
 			"Name": "MeshTerrainMode",
 			"Enabled": true
+		},
+		{
+			"Name": "FunctionalTestingEditor",
+			"Enabled": true
 		}
 	]
 }
