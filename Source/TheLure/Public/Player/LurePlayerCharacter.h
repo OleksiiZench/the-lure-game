@@ -9,6 +9,7 @@
 
 class UCameraComponent;
 class ULureInputConfig;
+class ULureStaminaComponent;
 
 struct FInputActionValue;
 
@@ -36,8 +37,15 @@ private:
 	void Input_SprintCompleted(const FInputActionValue &InputActionValue);
 #pragma endregion
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lure|Camera", meta = (AllowPrivateAccess = "true"))
+#pragma region Components
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lure|Components", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent *CameraComponent;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lure|Components", meta = (AllowPrivateAccess = "true"))
+	ULureStaminaComponent *StaminaComponent;
+#pragma endregion
+	
+	void SetupComponents();
 	void SetupCamera();
+	void SetupStaminaComponent();
 };

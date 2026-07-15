@@ -9,12 +9,11 @@
 
 #include "DataAssets/LureInputConfig.h"
 #include "LureGameplayTags.h"
-
-#include "LureDebugHelper.h"
+#include "Components/LureStaminaComponent.h"
 
 ALurePlayerCharacter::ALurePlayerCharacter()
 {
-	SetupCamera();
+	SetupComponents();
 }
 
 void ALurePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -65,12 +64,18 @@ void ALurePlayerCharacter::Input_Look(const FInputActionValue& InputActionValue)
 
 void ALurePlayerCharacter::Input_SprintStarted(const FInputActionValue& InputActionValue)
 {
-	Debug::Print(TEXT("Sprint started"));
+	StaminaComponent->SetStamina(true);
 }
 
 void ALurePlayerCharacter::Input_SprintCompleted(const FInputActionValue& InputActionValue)
 {
-	Debug::Print(TEXT("Sprint completed"));
+	StaminaComponent->SetStamina(false);
+}
+
+void ALurePlayerCharacter::SetupComponents()
+{
+	SetupCamera();
+	SetupStaminaComponent();
 }
 
 void ALurePlayerCharacter::SetupCamera()
@@ -79,4 +84,9 @@ void ALurePlayerCharacter::SetupCamera()
 	CameraComponent->SetupAttachment(GetCapsuleComponent());
 	CameraComponent->SetRelativeLocation(FVector(-10.0f, 0.0f, 60.0f));
 	CameraComponent->bUsePawnControlRotation = true;
+}
+
+void ALurePlayerCharacter::SetupStaminaComponent()
+{
+	StaminaComponent = CreateDefaultSubobject<ULureStaminaComponent>(TEXT("StaminaComponent"));
 }
