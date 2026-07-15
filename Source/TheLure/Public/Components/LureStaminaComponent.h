@@ -25,11 +25,11 @@ public:
 	
 private:
 #pragma region SetupStamina
-	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
-	float WalkSpeed = 500.0f;
+	UPROPERTY(VisibleAnywhere, Category = "Lure|Movement")
+	float WalkSpeed;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
-	float SprintSpeed = 800.0f;
+	float SprintSpeed = 900.0f;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
 	float MaxStamina = 3.0f;
@@ -59,4 +59,6 @@ private:
 	
 	void CachePlayerCharacter();
 	void CacheCharacterMovementComp();
+	
+	void SetupWalkSpeed();
 };

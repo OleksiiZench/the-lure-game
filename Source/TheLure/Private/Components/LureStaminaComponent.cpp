@@ -18,6 +18,8 @@ void ULureStaminaComponent::BeginPlay()
 	
 	CachePlayerCharacter();
 	CacheCharacterMovementComp();
+	
+	SetupWalkSpeed();
 }
 
 void ULureStaminaComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -79,7 +81,7 @@ bool ULureStaminaComponent::IsMovingHorizontally() const
 	if (!CachedPlayerCharacter)
 		return false;
 	
-	return !(CachedPlayerCharacter->GetVelocity().Size2D() < 5.0f);
+	return !(CachedPlayerCharacter->GetVelocity().SizeSquared2D() < 25.0f);
 }
 
 bool ULureStaminaComponent::IsMovingBackward() const
@@ -114,4 +116,10 @@ void ULureStaminaComponent::CacheCharacterMovementComp()
 	{
 		CachedCharacterMovementComp = CachedPlayerCharacter->GetCharacterMovement();
 	}
+}
+
+void ULureStaminaComponent::SetupWalkSpeed()
+{
+	if (CachedCharacterMovementComp)
+		WalkSpeed = CachedCharacterMovementComp->MaxWalkSpeed;
 }
