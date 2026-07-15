@@ -10,6 +10,8 @@
 #include "DataAssets/LureInputConfig.h"
 #include "LureGameplayTags.h"
 
+#include "LureDebugHelper.h"
+
 ALurePlayerCharacter::ALurePlayerCharacter()
 {
 	SetupCamera();
@@ -31,6 +33,13 @@ void ALurePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		const UInputAction *LookAction = InputConfig->FindNativeInputActionForTag(LureGameplayTags::InputTag_Look, true);
 		if (LookAction)
 			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALurePlayerCharacter::Input_Look);
+		
+		const UInputAction *SprintAction = InputConfig->FindNativeInputActionForTag(LureGameplayTags::InputTag_Sprint, true);
+		if (SprintAction)
+		{
+			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ALurePlayerCharacter::Input_SprintStarted);
+			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ALurePlayerCharacter::Input_SprintCompleted);
+		}
 	}
 }
 
@@ -52,6 +61,16 @@ void ALurePlayerCharacter::Input_Look(const FInputActionValue& InputActionValue)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void ALurePlayerCharacter::Input_SprintStarted(const FInputActionValue& InputActionValue)
+{
+	Debug::Print(TEXT("Sprint started"));
+}
+
+void ALurePlayerCharacter::Input_SprintCompleted(const FInputActionValue& InputActionValue)
+{
+	Debug::Print(TEXT("Sprint completed"));
 }
 
 void ALurePlayerCharacter::SetupCamera()
