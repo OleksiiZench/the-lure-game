@@ -64,12 +64,12 @@ void ALurePlayerCharacter::Input_Look(const FInputActionValue& InputActionValue)
 
 void ALurePlayerCharacter::Input_SprintStarted(const FInputActionValue& InputActionValue)
 {
-	StaminaComponent->SetStamina(true);
+	StaminaComponent->SetSprint(true);
 }
 
 void ALurePlayerCharacter::Input_SprintCompleted(const FInputActionValue& InputActionValue)
 {
-	StaminaComponent->SetStamina(false);
+	StaminaComponent->SetSprint(false);
 }
 
 void ALurePlayerCharacter::SetupComponents()
