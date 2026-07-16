@@ -39,7 +39,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
 	float MaxStamina = 3.0f;
 	
-	UPROPERTY(VisibleAnywhere, Category = "Lure|Movement")
+	UPROPERTY(EditAnywhere, Category = "Lure|Movement")
 	float CurrentStamina = MaxStamina;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
