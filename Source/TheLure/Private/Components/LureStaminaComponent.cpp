@@ -34,10 +34,16 @@ void ULureStaminaComponent::SetSprint(bool bIsSprint)
 	if (!CachedCharacterMovementComp)
 		return;
 	
-	if (bIsSprint && IsMovingHorizontally())
+	if (bIsSprint)
 	{
-		CachedCharacterMovementComp->MaxWalkSpeed = SprintSpeed;
-		bIsSprinting = true;
+		if (!IsSprinting() && !HasEnoughStaminaToSprint())
+			return;
+		
+		if (IsMovingHorizontally())
+		{
+			CachedCharacterMovementComp->MaxWalkSpeed = SprintSpeed;
+			bIsSprinting = true;
+		}
 	}
 	else
 	{
@@ -73,6 +79,9 @@ void ULureStaminaComponent::UpdateStamina(float DeltaTime)
 	else if (CurrentStamina < MaxStamina)
 	{
 		CurrentStamina += StaminaRegenRate * DeltaTime;
+		
+		if (CurrentStamina > MaxStamina)
+			CurrentStamina = MaxStamina;
 	}
 }
 
@@ -102,6 +111,11 @@ bool ULureStaminaComponent::IsMovingBackward() const
 	float DotProduct = FVector::DotProduct(MovementDirection, FacingDirection);
 	
 	return DotProduct < -0.1f;
+}
+
+bool ULureStaminaComponent::HasEnoughStaminaToSprint() const
+{
+	return CurrentStamina >= (MaxStamina * MinStaminaPercentToSprint);
 }
 
 void ULureStaminaComponent::CachePlayerCharacter()

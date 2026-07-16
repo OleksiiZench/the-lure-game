@@ -42,6 +42,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Lure|Movement")
 	float CurrentStamina = MaxStamina;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float MinStaminaPercentToSprint = 0.0f;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
 	float StaminaDrainRate = 1.0f;
 	
@@ -59,6 +62,7 @@ private:
 	
 	bool IsMovingHorizontally() const;
 	bool IsMovingBackward() const;
+	bool HasEnoughStaminaToSprint() const;
 	
 	void CachePlayerCharacter();
 	void CacheCharacterMovementComp();
