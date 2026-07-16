@@ -43,7 +43,7 @@ private:
 	float CurrentStamina = MaxStamina;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement", meta = (ClampMin = "0.0", ClampMax = "1.0"))
-	float MinStaminaPercentToSprint = 0.0f;
+	float MinStaminaPercentToSprint = 0.2f;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
 	float StaminaDrainRate = 1.0f;

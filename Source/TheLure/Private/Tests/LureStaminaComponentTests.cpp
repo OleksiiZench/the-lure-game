@@ -79,13 +79,40 @@ bool FLureStamina_DrainAndRegen::RunTest(const FString& Parameters)
 	MovementComp->Velocity = FVector::ZeroVector;
 	
 	// Act
+	StaminaComp->UpdateStamina(0.1f);
+	MovementComp->Velocity = PlayerCharacter->GetActorForwardVector() * 500.0f;
+	StaminaComp->SetSprint(true);
+	
+	// Assert
+	TestFalse(
+	TEXT("Stamina should be blocked if stamina is below the threshold"),
+	StaminaComp->IsSprinting()
+	);
+	TestEqual(
+		TEXT("Speed should remain at walk speed if threshold is not met"),
+		MovementComp->MaxWalkSpeed,
+		500.0f
+	);
+	
+	
+	// Arrange
+	MovementComp->Velocity = FVector::ZeroVector;
+	
+	// Act
 	StaminaComp->UpdateStamina(1.0f);
+	MovementComp->Velocity = PlayerCharacter->GetActorForwardVector() * 500.0f;
+	StaminaComp->SetSprint(true);
 	
 	// Assert
 	TestTrue(
-		TEXT("Stamina should regenerate"),
-		StaminaComp->GetCurrentStamina() > 0.0f
+	TEXT("Sprint should activate when stamina is above the threshold"),
+	StaminaComp->IsSprinting()
 	);
+	TestTrue(
+		TEXT("Speed should change to sprint speed"),
+		MovementComp->MaxWalkSpeed > 500.0f
+	);
+	
 	
 	TestWorld->DestroyWorld(false);
 	
