@@ -22,6 +22,11 @@ public:
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 	
 	void SetSprint(bool bIsSprint);
+	void UpdateStamina(float DeltaTime);
+	
+	float GetCurrentStamina() const { return CurrentStamina; }
+	float GetMaxStamina() const { return MaxStamina; }
+	bool IsSprinting() const { return bIsSprinting; }
 	
 private:
 #pragma region SetupStamina
@@ -51,8 +56,6 @@ private:
 	UCharacterMovementComponent *CachedCharacterMovementComp;
 	
 	bool bIsSprinting = false;
-	
-	void UpdateStamina(float DeltaTime);
 	
 	bool IsMovingHorizontally() const;
 	bool IsMovingBackward() const;
