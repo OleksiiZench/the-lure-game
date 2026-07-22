@@ -41,7 +41,7 @@ void ULureStaminaComponent::SetSprint(bool bIsSprint)
 		
 		if (IsMovingHorizontally())
 		{
-			CachedCharacterMovementComp->MaxWalkSpeed = SprintSpeed;
+			CachedCharacterMovementComp->MaxWalkSpeed = GetDesiredSprintSpeed();
 			bIsSprinting = true;
 		}
 	}
@@ -67,6 +67,8 @@ void ULureStaminaComponent::UpdateStamina(float DeltaTime)
 		}
 		else
 		{
+			CachedCharacterMovementComp->MaxWalkSpeed = GetDesiredSprintSpeed();
+			
 			CurrentStamina -= StaminaDrainRate * DeltaTime;
 		
 			if (CurrentStamina <= 0.0f)
@@ -113,9 +115,37 @@ bool ULureStaminaComponent::IsMovingBackward() const
 	return DotProduct < -0.1f;
 }
 
+bool ULureStaminaComponent::IsMovingSideways() const
+{
+	if (!CachedPlayerCharacter)
+		return false;
+	
+	FVector Velocity = CachedPlayerCharacter->GetVelocity();
+	
+	if (Velocity.SizeSquared2D() < 10.0f)
+		return false;
+	
+	FVector MovementDirection = Velocity.GetSafeNormal2D();
+	FVector FacingDirection = CachedPlayerCharacter->GetActorForwardVector().GetSafeNormal2D();
+	
+	float DotProduct = FVector::DotProduct(MovementDirection, FacingDirection);
+	
+	return DotProduct < 0.7f;
+}
+
 bool ULureStaminaComponent::HasEnoughStaminaToSprint() const
 {
 	return CurrentStamina >= (MaxStamina * MinStaminaPercentToSprint);
+}
+
+float ULureStaminaComponent::GetDesiredSprintSpeed() const
+{
+	if (IsMovingSideways())
+	{
+		return SideSprintSpeed;
+	}
+	
+	return SprintSpeed;
 }
 
 void ULureStaminaComponent::CachePlayerCharacter()

@@ -37,6 +37,9 @@ private:
 	float SprintSpeed = 900.0f;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
+	float SideSprintSpeed = 700.0f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Lure|Movement")
 	float MaxStamina = 3.0f;
 	
 	UPROPERTY(EditAnywhere, Category = "Lure|Movement")
@@ -60,8 +63,10 @@ private:
 	
 	bool bIsSprinting = false;
 	
+	float GetDesiredSprintSpeed() const;
 	bool IsMovingHorizontally() const;
 	bool IsMovingBackward() const;
+	bool IsMovingSideways() const;
 	bool HasEnoughStaminaToSprint() const;
 	
 	void CachePlayerCharacter();
