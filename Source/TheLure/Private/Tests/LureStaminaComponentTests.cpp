@@ -36,6 +36,7 @@ bool FLureStamina_DrainAndRegen::RunTest(const FString& Parameters)
 	
 	StaminaComp->BeginPlay();
 	
+	
 	// Arrange
 	MovementComp->Velocity = PlayerCharacter->GetActorForwardVector() * 500.0f;
 	StaminaComp->SetSprint(true);
@@ -111,6 +112,39 @@ bool FLureStamina_DrainAndRegen::RunTest(const FString& Parameters)
 	TestTrue(
 		TEXT("Speed should change to sprint speed"),
 		MovementComp->MaxWalkSpeed > 500.0f
+	);
+	
+	
+	// Arrange
+	MovementComp->Velocity = PlayerCharacter->GetActorRightVector() * 500.0f;
+	StaminaComp->SetSprint(true);
+	
+	// Act
+	StaminaComp->UpdateStamina(0.1f);
+	
+	// Assert
+	TestEqual(
+		TEXT("Speed should be SideSprintSpeed (700) when strafing"),
+		MovementComp->MaxWalkSpeed,
+		700.0f
+	);
+	
+	
+	// Arrange
+	MovementComp->Velocity = PlayerCharacter->GetActorForwardVector() * -500.0f;
+	
+	// Act
+	StaminaComp->UpdateStamina(0.1f);
+	
+	// Assert
+	TestFalse(
+		TEXT("Sprint should be cancelled when moving backward"),
+		StaminaComp->IsSprinting()
+	);
+	TestEqual(
+		TEXT("Speed should revert to walk speed when moving backward"),
+		MovementComp->MaxWalkSpeed,
+		500.0f
 	);
 	
 	
